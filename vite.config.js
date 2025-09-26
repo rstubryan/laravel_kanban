@@ -12,8 +12,9 @@ export default defineConfig({
         tailwindcss(),
         svelte()
     ],
-    resolve: name => {
-        const pages = import.meta.glob('./Pages/**/*.svelte', {eager: true})
-        return pages[`./Pages/${name}.svelte`]
+    resolve: {
+        alias: {
+            $lib: '/resources/js/lib',
+        },
     },
 });
