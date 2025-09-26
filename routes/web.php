@@ -10,5 +10,10 @@ Route::get('/', function () {
 
 Route::prefix('login')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('Auth/Login/Index');
-    Route::post('/', [AuthController::class, 'store'])->name('Auth/Login/Store');
+    Route::post('/', [AuthController::class, 'login'])->name('Auth/Login/Store');
+});
+
+Route::prefix('register')->group(function () {
+    Route::get('/', [AuthController::class, 'index'])->name('Auth/Register/Index');
+    Route::post('/', [AuthController::class, 'register'])->name('Auth/Register/Store');
 });

@@ -6,35 +6,42 @@
     import {Form, Link, useForm} from '@inertiajs/svelte'
 
     const form = useForm({
+        name: '',
         email: '',
-        password: ''
+        password: '',
+        password_confirmation: ''
     });
 </script>
 
 
 <Card.Root class="mx-auto w-full max-w-sm">
     <Card.Header>
-        <Card.Title class="text-2xl">Login</Card.Title>
-        <Card.Description>Enter your email below to login to your account</Card.Description>
+        <Card.Title class="text-2xl">Register</Card.Title>
+        <Card.Description>Enter your email below to Register your account</Card.Description>
     </Card.Header>
     <Card.Content>
-        <Form action="/login" method="post" {form} on:submit>
+        <Form action="/register" method="post" {form} on:submit>
             <div class="grid gap-4">
+                <div class="grid gap-2">
+                    <Label for="name">Name</Label>
+                    <Input id="name" name="name" type="text" placeholder="Your Name" required
+                           bind:value={form.name}/>
+                </div>
                 <div class="grid gap-2">
                     <Label for="email">Email</Label>
                     <Input id="email" name="email" type="email" placeholder="m@example.com" required
                            bind:value={form.email}/>
                 </div>
                 <div class="grid gap-2">
-                    <div class="flex items-center">
-                        <Label for="password">Password</Label>
-                        <a href="##" class="ml-auto inline-block text-sm underline">
-                            Forgot your password?
-                        </a>
-                    </div>
+                    <Label for="password">Password</Label>
                     <Input id="password" name="password" type="password" required bind:value={form.password}/>
                 </div>
-                <Button type="submit" class="w-full">Login</Button>
+                <div class="grid gap-2">
+                    <Label for="password_confirmation">Confirm Password</Label>
+                    <Input id="password_confirmation" name="password_confirmation" type="password" required
+                           bind:value={form.password_confirmation}/>
+                </div>
+                <Button type="submit" class="w-full">Register</Button>
                 <Button variant="outline" class="w-full">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
@@ -42,13 +49,13 @@
                             fill="currentColor"
                         />
                     </svg>
-                    Login with Google
+                    Register with Google
                 </Button>
             </div>
         </Form>
         <div class="mt-4 text-center text-sm">
-            Don't have an account?
-            <Link href="/register" class="underline"> Sign up</Link>
+            Have an account?
+            <Link href="/login" class="underline"> Sign in</Link>
         </div>
     </Card.Content>
 </Card.Root>

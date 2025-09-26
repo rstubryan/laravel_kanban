@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -11,15 +12,31 @@ class AuthController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Auth/Login/Index');
+        if ($request->path() === 'login') {
+            return Inertia::render('Auth/Login/Index');
+        }
+
+        if ($request->path() === 'register') {
+            return Inertia::render('Auth/Register/Index');
+        }
+
+        return redirect('/');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
+    {
+        //
+    }
+
+    /**
+     * Handle an authentication attempt.
+     */
+    public function login(Request $request)
     {
         if (Auth::check()) {
             return redirect()->intended('/');
@@ -39,6 +56,30 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    /**
+     * Register a newly created resource in storage.
+     */
+    public function register(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect()->intended('/');
+        }
+
+        $credentials = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        User::create([
+            'name' => $credentials['name'],
+            'email' => $credentials['email'],
+            'password' => bcrypt($credentials['password']),
+        ]);
+
+        return redirect('/login');
     }
 
     /**
