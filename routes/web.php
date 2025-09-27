@@ -21,9 +21,8 @@ Route::middleware('guest')->group(function () {
     });
 });
 
-Route::prefix('auth')->middleware('auth')->group(function () {
-    Route::delete('/logout', [AuthController::class, 'destroy'])->name('auth.logout');
-
+Route::middleware('auth')->group(function () {
+    Route::delete('/auth/logout', [AuthController::class, 'destroy'])->name('auth.logout');
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     });

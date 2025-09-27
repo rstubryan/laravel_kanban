@@ -7,7 +7,7 @@
     <h1>
         Hello World
     </h1>
-    <Form action="/logout" method="delete">
+    <Form action="/auth/logout" method="delete">
         <Button type="submit">Logout</Button>
     </Form>
 </div>
