@@ -1,13 +1,11 @@
 <script>
     import {Button} from "$lib/components/ui/button";
     import {Form} from "@inertiajs/svelte";
+    import ContentLayout from "$lib/layouts/content-layout.svelte";
 </script>
 
-<div>
-    <h1>
-        Hello World
-    </h1>
+<ContentLayout>
     <Form action="/auth/logout" method="delete">
         <Button type="submit">Logout</Button>
     </Form>
-</div>
+</ContentLayout>
