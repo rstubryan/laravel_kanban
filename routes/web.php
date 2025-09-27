@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -8,12 +9,22 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
-Route::prefix('login')->group(function () {
-    Route::get('/', [AuthController::class, 'index'])->name('Auth/Login/Index');
-    Route::post('/', [AuthController::class, 'login'])->name('Auth/Login/Store');
+Route::middleware('guest')->group(function () {
+    Route::prefix('login')->group(function () {
+        Route::get('/', [AuthController::class, 'index'])->name('login');
+        Route::post('/', [AuthController::class, 'login'])->name('login.store');
+    });
+
+    Route::prefix('register')->group(function () {
+        Route::get('/', [AuthController::class, 'index'])->name('register');
+        Route::post('/', [AuthController::class, 'register'])->name('register.store');
+    });
 });
 
-Route::prefix('register')->group(function () {
-    Route::get('/', [AuthController::class, 'index'])->name('Auth/Register/Index');
-    Route::post('/', [AuthController::class, 'register'])->name('Auth/Register/Store');
+Route::prefix('auth')->middleware('auth')->group(function () {
+    Route::delete('/logout', [AuthController::class, 'destroy'])->name('auth.logout');
+
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    });
 });

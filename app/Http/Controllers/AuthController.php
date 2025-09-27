@@ -53,9 +53,9 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        return redirect()->route('login')
+            ->withErrors(['email' => 'The provided credentials do not match our records.'])
+            ->onlyInput('email');
     }
 
     /**
@@ -104,11 +104,8 @@ class AuthController extends Controller
     public function destroy(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }
