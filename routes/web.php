@@ -29,10 +29,10 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('projects')->group(function () {
             Route::get('/', [ProjectController::class, 'index'])->name('projects.index');
-//            Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
+            Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
 //            Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');
 //            Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
-//            Route::delete('/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+            Route::delete('/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
         });
     });
 });

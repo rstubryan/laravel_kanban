@@ -27,7 +27,22 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Project::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'created_by' => auth()->id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Project created successfully.');
     }
 
     /**
@@ -51,6 +66,11 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        $project = Project::findOrFail($id);
+        $project->delete();
+        return redirect()->back()->with('success', 'Project deleted successfully.');
     }
 }

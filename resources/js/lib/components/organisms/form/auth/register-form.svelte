@@ -25,21 +25,21 @@
                 <div class="grid gap-2">
                     <Label for="name">Name</Label>
                     <Input id="name" name="name" type="text" placeholder="Your Name" required
-                           bind:value={form.name}/>
+                           bind:value={$form.name}/>
                 </div>
                 <div class="grid gap-2">
                     <Label for="email">Email</Label>
                     <Input id="email" name="email" type="email" placeholder="m@example.com" required
-                           bind:value={form.email}/>
+                           bind:value={$form.email}/>
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" name="password" type="password" required bind:value={form.password}/>
+                    <Input id="password" name="password" type="password" required bind:value={$form.password}/>
                 </div>
                 <div class="grid gap-2">
                     <Label for="password_confirmation">Confirm Password</Label>
                     <Input id="password_confirmation" name="password_confirmation" type="password" required
-                           bind:value={form.password_confirmation}/>
+                           bind:value={$form.password_confirmation}/>
                 </div>
                 <Button type="submit" class="w-full">Register</Button>
                 <Button variant="outline" class="w-full">
