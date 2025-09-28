@@ -64,7 +64,23 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $project = Project::findOrFail($id);
+        $project->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'created_by' => auth()->id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Project updated successfully.');
     }
 
     /**

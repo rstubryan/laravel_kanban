@@ -4,6 +4,7 @@
     import {Button} from "$lib/components/ui/button";
     import {Input} from "$lib/components/ui/input";
     import {Form, Link} from "@inertiajs/svelte";
+    import EditProjectForm from "$lib/components/organisms/form/project/edit-project-form.svelte";
 
     let {items} = $props();
 
@@ -38,6 +39,7 @@
                 </div>
             </Card.Content>
             <Card.Footer class="flex gap-2">
+                <EditProjectForm project={project}/>
                 <Link href={`/dashboard/projects/${project.id}`}>
                     <Button class="w-full" variant="outline">
                         Show Project
