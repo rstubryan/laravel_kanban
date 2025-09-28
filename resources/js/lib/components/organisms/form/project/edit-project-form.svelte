@@ -51,10 +51,10 @@
             </div>
             <Dialog.Footer>
                 <Button type="submit" disabled={processing}>Save changes</Button>
-                <Dialog.Close class="hidden">
-                    <Button variant="outline" class="hidden" bind:ref={modalClose}>Close</Button>
-                </Dialog.Close>
             </Dialog.Footer>
         </Form>
+        <Dialog.Close class="hidden">
+            <Button variant="outline" class="hidden" bind:ref={modalClose}>Close</Button>
+        </Dialog.Close>
     </Dialog.Content>
 </Dialog.Root>
