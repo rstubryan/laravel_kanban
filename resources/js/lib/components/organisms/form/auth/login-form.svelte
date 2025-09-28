@@ -22,7 +22,7 @@
                 <div class="grid gap-2">
                     <Label for="email">Email</Label>
                     <Input id="email" name="email" type="email" placeholder="m@example.com" required
-                           bind:value={$form.email}/>
+                    />
                     {#if errors.email}
                         <div class="text-red-500 text-sm">{errors.email}</div>
                     {/if}
@@ -31,7 +31,7 @@
                     <div class="flex items-center">
                         <Label for="password">Password</Label>
                     </div>
-                    <Input id="password" name="password" type="password" required bind:value={$form.password}/>
+                    <Input id="password" name="password" type="password" required/>
                 </div>
                 <Button type="submit" class="w-full" disabled={processing}>Login</Button>
                 <Button variant="outline" class="w-full">

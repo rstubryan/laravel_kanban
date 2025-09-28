@@ -35,17 +35,18 @@
             class="grid gap-4 py-4"
             resetOnSuccess
             onSuccess={handleSuccess}
+            let:processing
         >
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="name" class="text-right">Name</Label>
-                <Input id="name" name="name" bind:value={$form.name} class="col-span-3" required/>
+                <Input id="name" name="name" class="col-span-3" required/>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="description" class="text-right">Description</Label>
-                <Input id="description" name="description" bind:value={$form.description} class="col-span-3" required/>
+                <Input id="description" name="description" class="col-span-3" required/>
             </div>
             <Dialog.Footer>
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" disabled={processing}>Save changes</Button>
                 <Dialog.Close class="hidden">
                     <Button variant="outline" class="hidden" bind:ref={modalClose}>Close</Button>
                 </Dialog.Close>
