@@ -6,6 +6,7 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\Project as ProjectResource;
+use App\Http\Requests\Project as ProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -27,16 +28,11 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
 
         Project::create([
             'name' => $request->name,
@@ -64,16 +60,11 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProjectRequest $request, string $id)
     {
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
 
         $project = Project::findOrFail($id);
         $project->update([
