@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Resources\Project as ProjectResource;
 
 class ProjectController extends Controller
 {
@@ -16,7 +17,8 @@ class ProjectController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        $projects = Project::paginate(9);
+        $projects = Project::with('user')->paginate(9);
+        $projects = ProjectResource::collection($projects);
         return Inertia::render('Projects/Index', [
             'projects' => $projects
         ]);
