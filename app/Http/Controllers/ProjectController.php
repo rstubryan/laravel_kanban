@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjectRequest;
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Resources\Project as ProjectResource;
-use App\Http\Requests\Project as ProjectRequest;
 
 class ProjectController extends Controller
 {
