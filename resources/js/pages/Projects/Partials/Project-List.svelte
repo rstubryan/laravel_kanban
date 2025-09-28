@@ -3,7 +3,7 @@
     import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
     import {Button} from "$lib/components/ui/button";
     import {Input} from "$lib/components/ui/input";
-    import {Form} from "@inertiajs/svelte";
+    import {Form, Link} from "@inertiajs/svelte";
 
     let {items} = $props();
 
@@ -21,12 +21,28 @@
                 <Card.Title>{project.name}</Card.Title>
                 <Card.Description>{project.description}</Card.Description>
             </Card.Header>
-            <Card.Content>
-                <p>Project ID: {project.id}</p>
-                <p>Created by: {project.created_by}</p>
-                <p>Created at: {project.created_at}</p>
+            <Card.Content class="py-2">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-gray-700">ID:</span>
+                        <span class="text-gray-500">{project.id}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-gray-700">Created by:</span>
+                        <span class="text-gray-500">{project.created_by}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-gray-700">Created at:</span>
+                        <span class="text-gray-500">{project.created_at}</span>
+                    </div>
+                </div>
             </Card.Content>
-            <Card.Footer>
+            <Card.Footer class="flex gap-2">
+                <Link href={`/dashboard/projects/${project.id}`}>
+                    <Button class="w-full" variant="outline">
+                        Show Project
+                    </Button>
+                </Link>
                 <AlertDialog.Root>
                     <AlertDialog.Trigger class="w-full">
                         <Button class="w-full">

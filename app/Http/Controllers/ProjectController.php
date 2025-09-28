@@ -50,7 +50,13 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        //
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        $project = Project::findOrFail($id);
+        return Inertia::render('Projects/Show', [
+            'project' => $project
+        ]);
     }
 
     /**
