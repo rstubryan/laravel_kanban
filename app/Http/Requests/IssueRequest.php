@@ -25,7 +25,7 @@ class IssueRequest extends FormRequest
             'task_id' => 'nullable|exists:tasks,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:open,in_progress,closed',
+            'status' => 'required|in:open,in_progress,resolved,closed',
             'due_date' => 'nullable|date',
             'created_by' => 'required|exists:users,id',
             'assigned_to' => 'nullable|exists:users,id',

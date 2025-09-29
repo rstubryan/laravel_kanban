@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Repositories\IssueRepository;
+use App\Repositories\IssueRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepository;
 use App\Repositories\TaskRepositoryInterface;
+use App\Services\IssueService;
+use App\Services\IssueServiceInterface;
 use App\Services\ProjectService;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskService;
@@ -34,6 +38,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             TaskServiceInterface::class,
             TaskService::class
+        );
+        $this->app->bind(
+            IssueRepositoryInterface::class,
+            IssueRepository::class
+        );
+        $this->app->bind(
+            IssueServiceInterface::class,
+            IssueService::class
         );
     }
 

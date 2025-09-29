@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TaskResource;
+use App\Http\Resources\IssueResource;
+use App\Models\Task;
+use App\Models\User;
 use App\Services\IssueServiceInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,17 +21,22 @@ class IssueController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(TaskResource $taskResource)
+    public function index()
     {
         if (!auth()->check()) {
             return redirect()->route('login');
         }
 
         $issues = $this->issueService->getAllIssues();
-        $issues = TaskResource::collection($issues);
+        $issues = IssueResource::collection($issues);
+
+        $tasks = Task::all(['id', 'title']);
+        $users = User::all(['id', 'name']);
 
         return Inertia::render('Issues/Index', [
             'issues' => $issues,
+            'tasks' => $tasks,
+            'users' => $users,
         ]);
     }
 
@@ -44,6 +51,11 @@ class IssueController extends Controller
 
         $data = $request->all();
         $data['created_by'] = auth()->id();
+
+        if (empty($data['task_id'])) {
+            $data['task_id'] = null;
+        }
+
         $this->issueService->createIssue($data);
 
         return redirect()->back()->with('success', 'Issue created successfully.');
@@ -63,8 +75,13 @@ class IssueController extends Controller
             return redirect()->back()->with('error', 'Issue not found.');
         }
 
+        $tasks = Task::all(['id', 'title']);
+        $users = User::all(['id', 'name']);
+
         return Inertia::render('Issues/Show', [
-            'issue' => $issue
+            'issue' => $issue,
+            'tasks' => $tasks,
+            'users' => $users,
         ]);
     }
 

@@ -8,7 +8,7 @@ class IssueRepository implements IssueRepositoryInterface
 {
     public function getAllIssues()
     {
-        return Issue::paginate(9);
+        return Issue::with(['assignedUser', 'task'])->paginate(9);
     }
 
     public function getIssueById($id)
