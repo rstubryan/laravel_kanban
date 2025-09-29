@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
-use App\Models\Project;
-use Illuminate\Http\Request;
+use App\Services\ProjectServiceInterface;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
+    protected $projectService;
+
+    public function __construct(ProjectServiceInterface $projectService)
+    {
+        $this->projectService = $projectService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -18,7 +24,7 @@ class ProjectController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        $projects = Project::with('user')->paginate(9);
+        $projects = $this->projectService->getAllProjects();
         $projects = ProjectResource::collection($projects);
         return Inertia::render('Projects/Index', [
             'projects' => $projects
@@ -34,7 +40,7 @@ class ProjectController extends Controller
             return redirect()->route('login');
         }
 
-        Project::create([
+        $this->projectService->createProject([
             'name' => $request->name,
             'description' => $request->description,
             'created_by' => auth()->id(),
@@ -51,7 +57,7 @@ class ProjectController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        $project = Project::findOrFail($id);
+        $project = $this->projectService->getProjectById($id);
         return Inertia::render('Projects/Show', [
             'project' => $project
         ]);
@@ -66,8 +72,7 @@ class ProjectController extends Controller
             return redirect()->route('login');
         }
 
-        $project = Project::findOrFail($id);
-        $project->update([
+        $this->projectService->updateProject($id, [
             'name' => $request->name,
             'description' => $request->description,
             'created_by' => auth()->id(),
@@ -84,8 +89,7 @@ class ProjectController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        $project = Project::findOrFail($id);
-        $project->delete();
+        $this->projectService->deleteProject($id);
         return redirect()->back()->with('success', 'Project deleted successfully.');
     }
 }
