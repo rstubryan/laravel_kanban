@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Models\Project;
+use App\Models\User;
+use App\Services\TaskServiceInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
     protected $taskService;
+
+    public function __construct(TaskServiceInterface $taskService)
+    {
+        $this->taskService = $taskService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,7 +30,15 @@ class TaskController extends Controller
 
         $tasks = $this->taskService->getAllTasks();
         $tasks = TaskResource::collection($tasks);
-        return Inertia::render('Tasks/Index', ['tasks' => $tasks]);
+
+        $users = User::all(['id', 'name']);
+        $projects = Project::all(['id', 'name']);
+
+        return Inertia::render('Tasks/Index', [
+            'tasks' => $tasks,
+            'users' => $users,
+            'projects' => $projects,
+        ]);
     }
 
     /**

@@ -18,13 +18,16 @@ class TaskResource extends JsonResource
         Carbon::setLocale('id');
         return [
             'id' => $this->id,
+            'project_id' => $this->project_id,
             'project' => $this->project ? $this->project->name : null,
             'title' => $this->title,
             'description' => $this->description,
-            'status' => $this->status,
+            'status' => ucwords(str_replace('_', ' ', $this->status)),
             'created_by' => $this->creator ? $this->creator->name : null,
-            'due_date' => $this->due_date ? Carbon::parse($this->due_date)->translatedFormat('l, d F Y') : null,
-            'assigned_to' => $this->assignee ? $this->assignee->name : null,
+            'due_date' => $this->due_date ? Carbon::parse($this->due_date)->format('Y-m-d') : null,
+            'due_date_display' => $this->due_date ? Carbon::parse($this->due_date)->translatedFormat('l, d F Y') : null,
+            'assigned_to_id' => $this->assigned_to,
+            'assigned_to' => $this->assignedUser->name ?? null,
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l, d F Y H:i'),
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l, d F Y H:i'),
         ];
