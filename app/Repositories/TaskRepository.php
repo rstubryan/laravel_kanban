@@ -8,7 +8,7 @@ class TaskRepository implements TaskRepositoryInterface
 {
     public function getAllTasks()
     {
-        return Task::with('project')->paginate(9);
+        return Task::with(['project', 'assignedUser'])->paginate(9);
     }
 
     public function getTaskById($id)
