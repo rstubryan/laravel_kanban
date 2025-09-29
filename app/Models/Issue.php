@@ -1,37 +1,61 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Issue
+ * 
+ * @property int $id
+ * @property int|null $task_id
+ * @property string $title
+ * @property string|null $description
+ * @property string $status
+ * @property Carbon|null $due_date
+ * @property int $created_by
+ * @property int|null $assigned_to
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * 
+ * @property User $user
+ * @property Task|null $task
+ *
+ * @package App\Models
+ */
 class Issue extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssueFactory> */
-    use HasFactory;
+	protected $table = 'issues';
 
-    protected $fillable = [
-        'task_id',
-        'title',
-        'description',
-        'status',
-        'due_date',
-        'created_by',
-        'assigned_to',
-    ];
+	protected $casts = [
+		'task_id' => 'int',
+		'due_date' => 'datetime',
+		'created_by' => 'int',
+		'assigned_to' => 'int'
+	];
 
-    public function task()
-    {
-        return $this->belongsTo(Task::class);
-    }
+	protected $fillable = [
+		'task_id',
+		'title',
+		'description',
+		'status',
+		'due_date',
+		'created_by',
+		'assigned_to'
+	];
 
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
+	public function user()
+	{
+		return $this->belongsTo(User::class, 'created_by');
+	}
 
-    public function assignedTo()
-    {
-        return $this->belongsTo(User::class, 'assigned_to');
-    }
+	public function task()
+	{
+		return $this->belongsTo(Task::class);
+	}
 }

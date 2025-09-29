@@ -1,33 +1,51 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Project
+ * 
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property int $created_by
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * 
+ * @property User $user
+ * @property Collection|Task[] $tasks
+ *
+ * @package App\Models
+ */
 class Project extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProjectFactory> */
-    use HasFactory;
+	protected $table = 'projects';
 
-    protected $fillable = [
-        'name',
-        'description',
-        'created_by',
-    ];
+	protected $casts = [
+		'created_by' => 'int'
+	];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
+	protected $fillable = [
+		'name',
+		'description',
+		'created_by'
+	];
 
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
+	public function user()
+	{
+		return $this->belongsTo(User::class, 'created_by');
+	}
 
-    public function groups()
-    {
-        return $this->hasMany(Group::class);
-    }
+	public function tasks()
+	{
+		return $this->hasMany(Task::class);
+	}
 }
