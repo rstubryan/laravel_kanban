@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IssueController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}', [TaskController::class, 'show'])->name('tasks.show');
             Route::put('/{id}', [TaskController::class, 'update'])->name('tasks.update');
             Route::delete('/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+        });
+
+        Route::prefix('issues')->group(function () {
+            Route::get('/', [IssueController::class, 'index'])->name('issues.index');
+            Route::post('/', [IssueController::class, 'store'])->name('issues.store');
+            Route::get('/{id}', [IssueController::class, 'show'])->name('issues.show');
+            Route::put('/{id}', [IssueController::class, 'update'])->name('issues.update');
+            Route::delete('/{id}', [IssueController::class, 'destroy'])->name('issues.destroy');
         });
     });
 });
