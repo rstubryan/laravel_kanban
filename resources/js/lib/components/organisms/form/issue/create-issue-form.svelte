@@ -4,7 +4,7 @@
     import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
     import {Input} from "$lib/components/ui/input/index.js";
     import {Label} from "$lib/components/ui/label/index.js";
-    import {useForm, Form} from "@inertiajs/svelte";
+    import {Form} from "@inertiajs/svelte";
 
     let {tasks = [], users = []} = $props();
 
@@ -15,14 +15,9 @@
         {value: "closed", label: "Closed"}
     ];
 
-    const form = useForm({
-        title: '',
-        description: '',
-        status: 'open',
-        due_date: '',
-        task_id: '',
-        assigned_to: ''
-    });
+    let status = $state('pending');
+    let task_id = $state('');
+    let assigned_to = $state('');
 
     let modalClose = $state<HTMLButtonElement | null>(null);
 
@@ -45,7 +40,6 @@
         <Form
             action="/dashboard/issues"
             method="post"
-            {form}
             class="grid gap-4 py-4"
             resetOnSuccess
             onSuccess={handleSuccess}
@@ -64,12 +58,12 @@
                 <div class="col-span-3">
                     <Select.Root
                         type="single"
-                        bind:value={$form.status}
+                        bind:value={status}
                         name="status"
                         required
                     >
                         <Select.Trigger class="w-full">
-                            {statusOptions.find(o => o.value === $form.status)?.label ?? "Select status"}
+                            {statusOptions.find(o => o.value === status)?.label ?? "Select status"}
                         </Select.Trigger>
                         <Select.Content>
                             {#each statusOptions as option}
@@ -84,11 +78,11 @@
                 <div class="col-span-3">
                     <Select.Root
                         type="single"
-                        bind:value={$form.task_id}
+                        bind:value={task_id}
                         name="task_id"
                     >
                         <Select.Trigger class="w-full">
-                            {tasks.find(t => t.id === $form.task_id)?.title ?? "Select task"}
+                            {tasks.find(t => t.id === task_id)?.title ?? "Select task"}
                         </Select.Trigger>
                         <Select.Content>
                             {#each tasks as task}
@@ -107,11 +101,11 @@
                 <div class="col-span-3">
                     <Select.Root
                         type="single"
-                        bind:value={$form.assigned_to}
+                        bind:value={assigned_to}
                         name="assigned_to"
                     >
                         <Select.Trigger class="w-full">
-                            {users.find(u => u.id === $form.assigned_to)?.name ?? "Select user"}
+                            {users.find(u => u.id === assigned_to)?.name ?? "Select user"}
                         </Select.Trigger>
                         <Select.Content>
                             {#each users as user}
