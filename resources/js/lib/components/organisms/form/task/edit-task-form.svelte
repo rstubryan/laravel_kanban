@@ -1,10 +1,9 @@
 <script lang="ts">
     import * as Dialog from "$lib/components/ui/dialog/index.js";
-    import * as Select from "$lib/components/ui/select/index.js";
     import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
     import {Input} from "$lib/components/ui/input/index.js";
     import {Label} from "$lib/components/ui/label/index.js";
-    import {useForm, Form} from "@inertiajs/svelte";
+    import {Form} from "@inertiajs/svelte";
 
     let {task, users = [], projects = []} = $props();
 
@@ -14,23 +13,30 @@
         {value: "completed", label: "Completed"}
     ];
 
-    const form = useForm({
-        title: task?.title ?? '',
-        description: task?.description ?? '',
-        status: task?.status ? task.status.toLowerCase().replace(' ', '_') : 'pending',
-        project_id: task?.project_id ? String(task.project_id) : '',
-        due_date: task?.due_date ?? '',
-        assigned_to: task?.assigned_to_id ? String(task.assigned_to_id) : '',
-    });
+    let open = $state(false);
+
+    let status = $state(task?.status ? task.status.toLowerCase().replace(' ', '_') : 'pending');
+    let project_id = $state(task?.project_id ? String(task.project_id) : '');
+    let assigned_to = $state(task?.assigned_to_id ? String(task.assigned_to_id) : '');
 
     let modalClose = $state<HTMLButtonElement | null>(null);
 
     function handleSuccess() {
         modalClose?.click();
     }
+
+    function resetState() {
+        status = task?.status ? task.status.toLowerCase().replace(' ', '_') : 'pending';
+        project_id = task?.project_id ? String(task.project_id) : '';
+        assigned_to = task?.assigned_to_id ? String(task.assigned_to_id) : '';
+    }
+
+    function handleOpenChange(val: boolean) {
+        if (!val) resetState();
+    }
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open={open} onOpenChange={handleOpenChange}>
     <Dialog.Trigger class={buttonVariants({ variant: "outline" })}>
         Edit task
     </Dialog.Trigger>
@@ -44,82 +50,68 @@
         <Form
             action={`/dashboard/tasks/${task.id}`}
             method="put"
-            {form}
-            class="grid gap-4 py-4"
             resetOnSuccess
+            setDefaultsOnSuccess
             onSuccess={handleSuccess}
             let:processing
+            class="grid gap-4 py-4"
         >
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="title" class="text-right">Title</Label>
-                <Input id="title" name="title" type="text" class="col-span-3" required bind:value={$form.title}/>
+                <Input id="title" name="title" type="text" class="col-span-3" required value={task.title}/>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="description" class="text-right">Description</Label>
-                <Input id="description" name="description" type="text" class="col-span-3"
-                       bind:value={$form.description}/>
+                <Input id="description" name="description" type="text" class="col-span-3" value={task.description}/>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label class="text-right">Status</Label>
                 <div class="col-span-3">
-                    <Select.Root
-                        type="single"
-                        bind:value={$form.status}
+                    <select
                         name="status"
+                        class="w-full border rounded px-2 py-1"
                         required
+                        value={status}
                     >
-                        <Select.Trigger class="w-full">
-                            {statusOptions.find(o => o.value === $form.status)?.label ?? "Select status"}
-                        </Select.Trigger>
-                        <Select.Content>
-                            {#each statusOptions as option}
-                                <Select.Item value={option.value}>{option.label}</Select.Item>
-                            {/each}
-                        </Select.Content>
-                    </Select.Root>
+                        {#each statusOptions as option}
+                            <option value={option.value}>{option.label}</option>
+                        {/each}
+                    </select>
                 </div>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label class="text-right">Project</Label>
                 <div class="col-span-3">
-                    <Select.Root
-                        type="single"
-                        bind:value={$form.project_id}
+                    <select
                         name="project_id"
+                        class="w-full border rounded px-2 py-1"
                         required
+                        value={project_id}
                     >
-                        <Select.Trigger class="w-full">
-                            {projects.find(p => String(p.id) === $form.project_id)?.name ?? "Select project"}
-                        </Select.Trigger>
-                        <Select.Content>
-                            {#each projects as project}
-                                <Select.Item value={String(project.id)}>{project.name}</Select.Item>
-                            {/each}
-                        </Select.Content>
-                    </Select.Root>
+                        <option value="">Select project</option>
+                        {#each projects as project}
+                            <option value={String(project.id)}>{project.name}</option>
+                        {/each}
+                    </select>
                 </div>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="due_date" class="text-right">Due Date</Label>
-                <Input id="due_date" name="due_date" type="date" class="col-span-3" bind:value={$form.due_date}/>
+                <Input id="due_date" name="due_date" type="date" class="col-span-3" value={task.due_date}/>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label class="text-right">Assigned To</Label>
                 <div class="col-span-3">
-                    <Select.Root
-                        type="single"
-                        bind:value={$form.assigned_to}
+                    <select
                         name="assigned_to"
+                        class="w-full border rounded px-2 py-1"
+                        value={assigned_to}
                     >
-                        <Select.Trigger class="w-full">
-                            {users.find(u => String(u.id) === $form.assigned_to)?.name ?? "Select user"}
-                        </Select.Trigger>
-                        <Select.Content>
-                            {#each users as user}
-                                <Select.Item value={String(user.id)}>{user.name}</Select.Item>
-                            {/each}
-                        </Select.Content>
-                    </Select.Root>
+                        <option value="">Select user</option>
+                        {#each users as user}
+                            <option value={String(user.id)}>{user.name}</option>
+                        {/each}
+                    </select>
                 </div>
             </div>
             <Dialog.Footer>
