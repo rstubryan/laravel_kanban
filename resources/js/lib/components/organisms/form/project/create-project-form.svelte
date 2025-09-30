@@ -3,12 +3,7 @@
     import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
     import {Input} from "$lib/components/ui/input/index.js";
     import {Label} from "$lib/components/ui/label/index.js";
-    import {useForm, Form} from "@inertiajs/svelte";
-
-    const form = useForm({
-        name: '',
-        description: ''
-    });
+    import {Form} from "@inertiajs/svelte";
 
     let modalClose = $state<HTMLButtonElement | null>(null);
 
@@ -31,7 +26,6 @@
         <Form
             action="/dashboard/projects"
             method="post"
-            {form}
             class="grid gap-4 py-4"
             resetOnSuccess
             onSuccess={handleSuccess}

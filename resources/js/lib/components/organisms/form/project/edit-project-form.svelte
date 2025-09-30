@@ -3,14 +3,10 @@
     import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
     import {Input} from "$lib/components/ui/input/index.js";
     import {Label} from "$lib/components/ui/label/index.js";
-    import {useForm, Form} from "@inertiajs/svelte";
+    import {Form} from "@inertiajs/svelte";
 
     let {project} = $props();
 
-    const form = useForm({
-        name: project?.name ?? '',
-        description: project?.description ?? ''
-    });
 
     let modalClose = $state<HTMLButtonElement | null>(null);
 
@@ -33,7 +29,6 @@
         <Form
             action={`/dashboard/projects/${project.id}`}
             method="put"
-            {form}
             class="grid gap-4 py-4"
             resetOnSuccess
             onSuccess={handleSuccess}
@@ -41,12 +36,12 @@
         >
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="name" class="text-right">Name</Label>
-                <Input id="name" name="name" type="text" class="col-span-3" required bind:value={$form.name}/>
+                <Input id="name" name="name" type="text" class="col-span-3" required value={project.name}/>
             </div>
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="description" class="text-right">Description</Label>
                 <Input id="description" name="description" type="text" class="col-span-3" required
-                       bind:value={$form.description}
+                       value={project.description}
                 />
             </div>
             <Dialog.Footer>
