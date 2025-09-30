@@ -13,30 +13,14 @@
         {value: "completed", label: "Completed"}
     ];
 
-    let open = $state(false);
-
-    let status = $state(task?.status ? task.status.toLowerCase().replace(' ', '_') : 'pending');
-    let project_id = $state(task?.project_id ? String(task.project_id) : '');
-    let assigned_to = $state(task?.assigned_to_id ? String(task.assigned_to_id) : '');
-
     let modalClose = $state<HTMLButtonElement | null>(null);
 
     function handleSuccess() {
         modalClose?.click();
     }
-
-    function resetState() {
-        status = task?.status ? task.status.toLowerCase().replace(' ', '_') : 'pending';
-        project_id = task?.project_id ? String(task.project_id) : '';
-        assigned_to = task?.assigned_to_id ? String(task.assigned_to_id) : '';
-    }
-
-    function handleOpenChange(val: boolean) {
-        if (!val) resetState();
-    }
 </script>
 
-<Dialog.Root bind:open={open} onOpenChange={handleOpenChange}>
+<Dialog.Root>
     <Dialog.Trigger class={buttonVariants({ variant: "outline" })}>
         Edit task
     </Dialog.Trigger>
@@ -71,8 +55,9 @@
                         name="status"
                         class="w-full border rounded px-2 py-1"
                         required
-                        value={status}
+                        value={task.status}
                     >
+                        <option value="">Select status</option>
                         {#each statusOptions as option}
                             <option value={option.value}>{option.label}</option>
                         {/each}
@@ -86,11 +71,12 @@
                         name="project_id"
                         class="w-full border rounded px-2 py-1"
                         required
-                        value={project_id}
+                        value={task.project_id}
                     >
                         <option value="">Select project</option>
                         {#each projects as project}
-                            <option value={String(project.id)}>{project.name}</option>
+                            <option value={String(project.id)}
+                                    selected={String(project.id) === task.project_id}>{project.name}</option>
                         {/each}
                     </select>
                 </div>
@@ -105,11 +91,12 @@
                     <select
                         name="assigned_to"
                         class="w-full border rounded px-2 py-1"
-                        value={assigned_to}
+                        value={task.assigned_to_id}
                     >
                         <option value="">Select user</option>
                         {#each users as user}
-                            <option value={String(user.id)}>{user.name}</option>
+                            <option value={String(user.id)}
+                                    selected={String(user.id) === task.assigned_to_id}>{user.name}</option>
                         {/each}
                     </select>
                 </div>

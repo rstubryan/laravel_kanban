@@ -18,14 +18,14 @@ class IssueResource extends JsonResource
         Carbon::setLocale('id');
         return [
             'id' => $this->id,
-            'task_id' => $this->task_id,
+            'task_id' => $this->task_id ? (string)$this->task_id : '',
             'task' => $this->task ? $this->task->title : null,
             'title' => $this->title,
             'description' => $this->description,
-            'status' => ucwords(str_replace('_', ' ', $this->status)),
+            'status' => $this->status ? strtolower(str_replace(' ', '_', $this->status)) : 'open',
             'due_date' => $this->due_date ? Carbon::parse($this->due_date)->format('Y-m-d') : null,
             'due_date_display' => $this->due_date ? Carbon::parse($this->due_date)->translatedFormat('l, d F Y') : null, 'created_by' => $this->created_by,
-            'assigned_to_id' => $this->assigned_to,
+            'assigned_to_id' => $this->assigned_to ? (string)$this->assigned_to : '',
             'assigned_to' => $this->assignedUser->name ?? null,
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l, d F Y H:i'),
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l, d F Y H:i'),

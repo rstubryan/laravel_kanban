@@ -14,30 +14,14 @@
         {value: "closed", label: "Closed"}
     ];
 
-    let open = $state(false);
-
-    let status = $state(issue?.status ? issue.status.toLowerCase().replace(' ', '_') : 'open');
-    let task_id = $state(issue?.task_id ? String(issue.task_id) : '');
-    let assigned_to = $state(issue?.assigned_to_id ? String(issue.assigned_to_id) : '');
-
     let modalClose = $state<HTMLButtonElement | null>(null);
 
     function handleSuccess() {
         modalClose?.click();
     }
-
-    function resetState() {
-        status = issue?.status ? issue.status.toLowerCase().replace(' ', '_') : 'open';
-        task_id = issue?.task_id ? String(issue.task_id) : '';
-        assigned_to = issue?.assigned_to_id ? String(issue.assigned_to_id) : '';
-    }
-
-    function handleOpenChange(val: boolean) {
-        if (!val) resetState();
-    }
 </script>
 
-<Dialog.Root bind:open={open} onOpenChange={handleOpenChange}>
+<Dialog.Root>
     <Dialog.Trigger class={buttonVariants({ variant: "outline" })}>
         Edit issue
     </Dialog.Trigger>
@@ -72,7 +56,7 @@
                         name="status"
                         class="w-full border rounded px-2 py-1"
                         required
-                        value={status}
+                        value={issue.status}
                     >
                         {#each statusOptions as option}
                             <option value={option.value}>{option.label}</option>
@@ -86,11 +70,12 @@
                     <select
                         name="task_id"
                         class="w-full border rounded px-2 py-1"
-                        value={task_id}
+                        value={issue.task_id}
                     >
                         <option value="">Select task</option>
                         {#each tasks as task}
-                            <option value={String(task.id)} selected={String(task.id) === task_id}>{task.title}</option>
+                            <option value={String(task.id)}
+                                    selected={String(task.id) === issue.task_id}>{task.title}</option>
                         {/each}
                     </select>
                 </div>
@@ -105,12 +90,12 @@
                     <select
                         name="assigned_to"
                         class="w-full border rounded px-2 py-1"
-                        value={assigned_to}
+                        value={issue.assigned_to_id}
                     >
                         <option value="">Select user</option>
                         {#each users as user}
                             <option value={String(user.id)}
-                                    selected={String(user.id) === assigned_to}>{user.name}</option>
+                                    selected={String(user.id) === issue.assigned_to_id}>{user.name}</option>
                         {/each}
                     </select>
                 </div>
