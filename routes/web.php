@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -51,6 +52,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}', [IssueController::class, 'show'])->name('issues.show');
             Route::put('/{id}', [IssueController::class, 'update'])->name('issues.update');
             Route::delete('/{id}', [IssueController::class, 'destroy'])->name('issues.destroy');
+        });
+
+        Route::prefix('groups')->group(function () {
+            Route::get('/', [GroupController::class, 'index'])->name('groups.index');
+            Route::post('/', [GroupController::class, 'store'])->name('groups.store');
+            Route::get('/{id}', [GroupController::class, 'show'])->name('groups.show');
+            Route::put('/{id}', [GroupController::class, 'update'])->name('groups.update');
+            Route::delete('/{id}', [GroupController::class, 'destroy'])->name('groups.destroy');
         });
     });
 });
