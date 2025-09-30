@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Services\GroupServiceInterface;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class GroupController extends Controller
             return redirect('/login');
         }
         $groups = $this->groupService->getAllGroups();
-        $groups = Group::collection($groups);
+        $groups = GroupResource::collection($groups);
         return Inertia::render('Groups/Index', [
                 'groups' => $groups
             ]
@@ -43,7 +44,7 @@ class GroupController extends Controller
 
         $data = $request->all();
         $this->groupService->createGroup($data);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Group created successfully.');
     }
 
     /**
@@ -72,7 +73,7 @@ class GroupController extends Controller
 
         $data = $request->all();
         $this->groupService->updateGroup($id, $data);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Group updated successfully.');
     }
 
     /**
@@ -85,6 +86,6 @@ class GroupController extends Controller
         }
 
         $this->groupService->deleteGroup($id);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Group deleted successfully.');
     }
 }
